@@ -1,9 +1,5 @@
 package cn.edu.nenu.domain;
 
-/**
- * Created by wangh on 2019/3/29.
- */
-
 import cn.edu.nenu.config.orm.IdEntity;
 
 import javax.persistence.Column;
@@ -11,50 +7,42 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
- * 栏目分类
+ * ssh
+ * Created by chenf on 2019/6/16.
+ * 文章所属类型
  */
 @Entity
-@Table(name = "T_CATEGORY")
+@Table(name = "t_category")
 public class Category extends IdEntity {
-
+    //类型名称
     @Column
-    private String name;
+    private String typename;
 
-    @Column
-    private String sequence;
+    //所属大类对应的id，如果为0则为大类，不为0则所属大类的id
+    @Column(nullable = false)
+    private Long  parents_id;
 
-    @Column
-    private String status;
-
-    public Long getId() {
-        return id;
+    public String getTypename() {
+        return typename;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTypename(String typename) {
+        this.typename = typename;
     }
 
-    public String getName() {
-        return name;
+    public Long getParents_id() {
+        return parents_id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setParents_id(Long parents_id) {
+        this.parents_id = parents_id;
     }
 
-    public String getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(String sequence) {
-        this.sequence = sequence;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    @Override
+    public String toString() {
+        return "Category{" +
+                "typename='" + typename + '\'' +
+                ", parents_id=" + parents_id +
+                '}';
     }
 }

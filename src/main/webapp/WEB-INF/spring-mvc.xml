@@ -22,7 +22,7 @@
     <mvc:resources mapping="/static/**" location="/static/"/>
 
     <!-- 定义无Controller的path<->view直接映射 -->
-    <mvc:view-controller path="/" view-name="redirect:/dict"/>
+    <mvc:view-controller path="/" view-name="redirect:/Category"/>
 
 
     <!-- 视图解析器-->
