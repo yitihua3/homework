@@ -11,6 +11,7 @@
     <%--<li><a href="${ctx}/user">用户管理</a></li>--%>
     <%--<li><a href="${ctx}/dict/list">字典管理</a></li>--%>
     <li><a href="${ctx}/Category/list">类型管理</a></li>
+    <li><a href="${ctx}/article/list">文章管理</a></li>
 </ul>
 
 </body>
