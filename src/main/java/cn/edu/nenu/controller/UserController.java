@@ -12,13 +12,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -35,7 +38,7 @@ import java.util.UUID;
 @RequestMapping("/user")
 public class UserController {
 
-    private static final int PAGE_SIZE = 15;
+    private static final int PAGE_SIZE = 2;
 
     @Autowired
     public UserService userService;
@@ -133,10 +136,13 @@ public class UserController {
     public String register(User user,Model model,RedirectAttributes redirectAttributes){
         if(!user.getUserName().equals("")||!user.getPassword().equals("")){
                 try {
+                    float sort = userService.getMaxSort();
                     String encryptedPwd= Md5SaltTool.getEncryptedPwd(user.getPassword());
+                    user.setSort(sort+1);
                     user.setRole(0);
                     user.setPassword(encryptedPwd);
-                    User user1 = userService.save(user);
+                    user.setImage("../../../upload/image/moren.png");
+                    userService.save(user);
                     redirectAttributes.addAttribute("msg","注册成功");
                     return  "user/login";
                 } catch (Exception e) {
@@ -159,7 +165,6 @@ public class UserController {
     @RequestMapping(value = "/checkName",method = RequestMethod.POST)
     public void checkName(@RequestParam("userName") String userName, HttpServletResponse response) throws IOException{
         String result;
-        System.out.println(userName);
         if(!userName.equals("")){
             if(userService.findByUserName(userName)!=null){
                 result="{\"msg\":\"该用户名已存在！\"}";
@@ -207,40 +212,44 @@ public class UserController {
     /**
      * 更新个人信息
      * @param userName
-     * @param response
      * @param request
      * @throws IOException
      */
     @RequestMapping(value = "/update",method = RequestMethod.POST)
-    public void update(@RequestParam("userName") String userName,@RequestPart("file")Part part,HttpServletResponse response,HttpServletRequest request) throws IOException{
+    public String update(@RequestParam("userName") String userName, @RequestParam("password")String password,@RequestParam(value = "file",defaultValue = "")CommonsMultipartFile file, HttpServletRequest request,Model model) throws IOException, NoSuchAlgorithmException {
         User user = (User)request.getSession().getAttribute("user");
-        String name = part.getHeader("content-disposition");//获取请求的信息
-        System.out.println(name);//测试使用
-
+        String name =file.getOriginalFilename();//获取请求的信息
+        if (!password.equals("")){
+            String encryptedPwd= Md5SaltTool.getEncryptedPwd(password);
+            user.setPassword(encryptedPwd);
+        }
         user.setUserName(userName);
-
-        if(name!=null){
-
-            String postfix = name.substring(name.lastIndexOf("."), name.length() - 1);
-            System.out.println("测试获取文件的后缀：" + postfix);
-
+        if(name!=""){
+            String postfix = name.substring(name.lastIndexOf("."), name.length());
             //获取上传文件的目录
-            String root = request.getServletContext().getRealPath("/upload");
-            System.out.println("测试上传文件的路径：" + root);
+            String root = request.getServletContext().getRealPath("/upload/image");
             String x = UUID.randomUUID().toString() + postfix;
             String filename = root + "\\" + x;
-            System.out.println("测试产生新的文件名：" + filename);
-
             //上传文件到指定目录，不想上传文件就不调用这个
-            part.write(filename);
-
+            FileOutputStream fos = new FileOutputStream(filename);
+            //截取
+            InputStream in = file.getInputStream();
+            int b = 0;
+            while((b = in.read())!=-1) {
+                //写入
+                fos.write(b);
+            }
+            fos.close();
+            in.close();
             //修改数据库
-            String image = "../../../upload/"+x;
+            String image = "../../../upload/image/"+x;
             user.setImage(image);
         }
         userService.save(user);
         request.getSession().setAttribute("user",user);//修改session中的用户信息
         request.setAttribute("msg","修改成功!");
+        model.addAttribute("user",user);
+        return "user/main";
     }
 
 
@@ -252,11 +261,13 @@ public class UserController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/list",method = RequestMethod.GET)
+    @RequestMapping(value = "/manage",method = RequestMethod.GET)
     public String list(@RequestParam(value = "sortType", defaultValue = "auto") String sortType,
-                       @RequestParam(value = "page", defaultValue = "1") int pageNumber, Model model, ServletRequest request){
+                       @RequestParam(value = "page", defaultValue = "1") int pageNumber, Model model, HttpServletRequest request){
         Map<String, Object> searchParams = HttpServlet.getParametersStartingWith(request, "s_");
         Page<User> users = userService.getEntityPage(searchParams, pageNumber, PAGE_SIZE, sortType);
+        User user = (User) request.getSession().getAttribute("user");
+        model.addAttribute("user",user);
         model.addAttribute("users", users);
         model.addAttribute("sortType", sortType);
         model.addAttribute("PAGE_SIZE", PAGE_SIZE);
@@ -265,20 +276,36 @@ public class UserController {
     }
 
 
+    /**
+     *
+     * @param id
+     * @param response
+     * @throws IOException
+     */
+    @RequestMapping(value = "/updateRole",method = RequestMethod.POST)
+    private void updateRole(@PathVariable("userId")Long id,HttpServletResponse response) throws IOException {
+        User user = userService.findUser(id);
+        boolean flag = false;
+        if (user.getRole()==0){
+        user.setRole(1);
+        userService.save(user);
+        flag = true;
+        }
+        String result="{\"res\":"+flag+"}";
+        response.setContentType("application/json");
+        response.getWriter().write(String.valueOf(result));
 
-    //@RequestMapping(value = "/create",method = RequestMethod.POST)
-    @PostMapping(value = "/create")
-    public String create(RedirectAttributes redirectAttributes){
-
-        redirectAttributes.addFlashAttribute("message", "创建用户");
-        return "redirect:/user";
     }
 
 
-
-    @PostMapping("/delete")
-    public String delete(RedirectAttributes redirectAttributes, HttpServletRequest request){
-        String[] ids = request.getParameterValues("ids");
-        return "redirect:/user";
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.GET)
+    public String delete(@PathVariable("id")Long id){
+        userService.remove(id);
+        return "redirect:/user/manage";
     }
 }

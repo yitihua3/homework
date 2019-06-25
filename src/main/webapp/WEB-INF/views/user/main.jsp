@@ -168,7 +168,7 @@
 
 
 
-                            <form id="form1" action="${ctx}/user/update" method="post" enctype="multipart/form-data" >
+                            <form id="form1" action="${ctx}/user/update" method="post" enctype="multipart/form-data" onsubmit="return checkPassword()">
                                 <p>头像：</p>
                                 <img type="text" class="input-xlarge" id="i" style="width: 200px;height: 200px" src="${user.image}"/>
                                 <%--图像预览--%>
@@ -178,7 +178,7 @@
 
                                 <div class="file-box">
                                     请上传文件
-                                    <input  type="file" name="file" class="file-btn" id="doc" size="28" onchange="setImagePreview()"/>
+                                    <input  type="file" name="file" class="file-btn" id="doc" size="28" value="${user.image}" onchange="setImagePreview()"/>
                                 </div>
                                 <br>
                                 <p>用户名：</p>
@@ -186,6 +186,15 @@
                                 <img src="../../../img/yes.png" alt="" style="width:25px;height: 25px;display: none" id="yes">
                                 <img src="../../../img/no.png" alt="" style="width:25px;height: 25px;display: none" id="no"><span id="text"></span>
                                 <br>
+                                <p>修改密码：</p>
+                                <div class="form-group">
+                                    <label for="password" class="sr-only">密码</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="密码" autocomplete="off" style="width: 40%;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="re-password" class="sr-only">确认密码</label>
+                                    <input type="password" class="form-control" id="re-password" name="password2" placeholder="确认密码" autocomplete="off" style="width: 40%;"><span id="msg" style="color: #dd0000"></span>
+                                </div>
                                 <p>身份：</p>
                                 <c:if test="${user.role == '0'}">
                                     <input type="text" name="status"  align="center"  readonly class="form-control" id="disabledInput" type="text" placeholder="普通用户" disabled="" style="width: 40%;">
@@ -266,6 +275,26 @@
 <script type="text/javascript">
     $(document).ready(function () {
 //修改用户名，判断该用户名是否已存在
+        <%--$(document).ready(function () {--%>
+
+            <%--$("#userName").blur(--%>
+                <%--function () {--%>
+                    <%--$.ajax({--%>
+                        <%--type:"POST",--%>
+                        <%--url:"${ctx}/user/checkName",--%>
+                        <%--data:{userName:$("#userName").val()},--%>
+                        <%--datatype:"json",--%>
+                        <%--success:function (data) {--%>
+                            <%--console.info(data);--%>
+                            <%--var msg=document.getElementById('msg');--%>
+                            <%--$("#msg").html(data.msg);--%>
+
+                        <%--}--%>
+                    <%--})--%>
+                <%--}--%>
+            <%--)--%>
+
+        <%--})--%>
         $("#userName").blur(
             function check() {
                 $.ajax({
@@ -306,10 +335,19 @@
             }
 
         )
-
-
-
     })
+
+    function checkPassword() {
+        var psd1=document.getElementById("password").value;
+        var psd2=document.getElementById("re-password").value;
+        if(psd1!=psd2){
+            $("#msg").html("两次密码输入不一致");
+            return false;
+        }else {
+            return true;
+        }
+
+    }
 </script>
 
 

@@ -120,4 +120,17 @@ public class UserService {
         return spec;
     }
 
+    /**
+     *
+     * @return
+     */
+    public float getMaxSort() {
+        User user = userRepository.findFirstByOrderBySortDesc();
+        if (user==null){
+            return 0;
+        }else {
+            return user.getSort();
+        }
+
+    }
 }

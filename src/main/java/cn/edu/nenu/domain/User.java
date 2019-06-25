@@ -29,6 +29,9 @@ public class User extends IdEntity {
     @Column(length = 20,nullable = false)
     private int role;    //角色
 
+    @Column()
+    private float sort; //排序
+
     public Long getId() {
         return id;
     }
@@ -67,5 +70,13 @@ public class User extends IdEntity {
 
     public void setRole(int role) {
         this.role = role;
+    }
+
+    public float getSort() {
+        return sort;
+    }
+
+    public void setSort(float sort) {
+        this.sort = sort;
     }
 }

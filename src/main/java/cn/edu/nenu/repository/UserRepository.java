@@ -14,4 +14,6 @@ public interface UserRepository  extends PlatformRepository<User,Long> {
 
    // @Query("select from user u where u.userName = ?1")
     User findByUserName(String username);
+
+    User findFirstByOrderBySortDesc();
 }
