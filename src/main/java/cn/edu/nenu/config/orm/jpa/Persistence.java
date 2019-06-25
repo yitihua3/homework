@@ -14,9 +14,6 @@ import java.sql.SQLException;
 
 /**
  * Persistence Class
- *
- * @author <b>Oxidyc</b>, Copyright &#169; 2003
- * @version 1.0, 2019-04-26 0:43
  */
 public class Persistence {
     /**

@@ -16,18 +16,6 @@ import javax.persistence.*;
 @Table(name = "T_USER")
 public class User extends IdEntity {
 
-    @Column(length = 128)
-    private String realName;  //真实姓名
-
-    @ManyToOne
-    @JoinColumn(name = "gender_id",referencedColumnName = "id",nullable = false)
-    private Dict sex;  //性别
-
-    @Column
-    private String email;     //邮箱
-
-    @Column(length = 11)
-    private String phone;     //联系方式
 
     @Column(length = 36,unique=true,nullable = false)
     private String userName;  //用户名
@@ -35,8 +23,11 @@ public class User extends IdEntity {
     @Column(length = 128,nullable = false)
     private String password;  //密码
 
-    @Column
-    private String status;    //状态
+    @Column(length = 225)
+    private String image;  //头像
+
+    @Column(length = 20,nullable = false)
+    private int role;    //角色
 
     public Long getId() {
         return id;
@@ -44,38 +35,6 @@ public class User extends IdEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
-    public Dict getSex() {
-        return sex;
-    }
-
-    public void setSex(Dict sex) {
-        this.sex = sex;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getUserName() {
@@ -94,11 +53,19 @@ public class User extends IdEntity {
         this.password = password;
     }
 
-    public String getStatus() {
-        return status;
+    public String getImage() {
+        return image;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
     }
 }

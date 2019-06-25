@@ -7,10 +7,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.io.Serializable;
 
 /**
- * PlatformRepository Class
- *
- * @author <b>Oxidyc</b>, Copyright &#169; 2003
- * @version 1.0, 2019-04-26 1:51
+ *  PlatformRepository Class
+ * @param <T>
+ * @param <ID>
  */
 @NoRepositoryBean
 public interface PlatformRepository<T,ID extends Serializable> extends JpaSpecificationExecutor<T>,PagingAndSortingRepository<T,ID> {
