@@ -12,14 +12,13 @@ import java.util.List;
 /**
  *
  */
-public class DynamicSpecifications {
+public class DynamicSpecifications1 {
 
-    public static <T> Specification<T> bySearchFilter(final Collection<SearchFilter> filters, final Class<T> entityClazz) {
+    public static <T> Specification<T> bySearchFilter(final Collection<SearchFilter> filters, final Class<T> entityClazz,Long id) {
         return new Specification<T>() {
             @Override
             public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
                 if (CollectionsUtil.isNotEmpty(filters)) {
-
                     List<Predicate> predicates = Lists.newArrayList();
                     for (SearchFilter filter : filters) {
                         // nested path translate, 如Task的名为"user.name"的filedName, 转换为Task.user.name属性

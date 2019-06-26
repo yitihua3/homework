@@ -22,6 +22,9 @@ public class Category extends IdEntity {
     @Column(nullable = false)
     private Long  parents_id;
 
+    @Column()
+    private float sort; //排序
+
     public String getTypename() {
         return typename;
     }
@@ -38,11 +41,20 @@ public class Category extends IdEntity {
         this.parents_id = parents_id;
     }
 
+    public float getSort() {
+        return sort;
+    }
+
+    public void setSort(float sort) {
+        this.sort = sort;
+    }
+
     @Override
     public String toString() {
         return "Category{" +
                 "typename='" + typename + '\'' +
                 ", parents_id=" + parents_id +
+                ", sort=" + sort +
                 '}';
     }
 }

@@ -81,6 +81,10 @@
                     <a href="${ctx}/news?state=myNews&userId=${user.id}" ><i class="fa fa-desktop"></i> 我的新闻</a>
                 </li>
                 <li>
+                    <a href="${ctx}/Category/list"><i class="fa fa-bar-chart-o"></i>类别管理</a>
+                </li>
+
+                <li>
                     <a href="${ctx}/user/main"><i class="fa fa-bar-chart-o"></i>个人中心</a>
                 </li>
 

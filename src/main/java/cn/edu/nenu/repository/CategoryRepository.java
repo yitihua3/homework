@@ -40,4 +40,7 @@ public interface CategoryRepository extends PlatformRepository<Category,Long> {
     @Query("delete From  Category c where c.parents_id = ?1 or c.id=?1")
     void deleteAllCategory(Long pkId);
 
+
+    Category findFirstByOrderBySortDesc();
+
 }

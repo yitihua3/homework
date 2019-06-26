@@ -1,5 +1,7 @@
 package cn.edu.nenu.service;
 
+import cn.edu.nenu.config.orm.jpa.DynamicSpecifications;
+import cn.edu.nenu.config.orm.jpa.DynamicSpecifications1;
 import cn.edu.nenu.config.orm.jpa.SearchFilter;
 import cn.edu.nenu.domain.Category;
 import cn.edu.nenu.repository.CategoryRepository;
@@ -72,5 +74,53 @@ public class CategoryService {
     }
 
 
+    public Page<Category> getEntityPage(Map<String, Object> filterParams, int pageNumber, int pageSize, String sortType){
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
+        Specification<Category> spec = buildSpecification(filterParams);
+        return CategoryRepository.findAll(spec,pageRequest);
+    }
 
+
+    /**
+     *  创建分页请求
+     * @param pageNumber
+     * @param pageSize
+     * @param sortType
+     * @return
+     */
+    private PageRequest buildPageRequest(int pageNumber, int pageSize, String sortType) {
+        Sort sort = null;
+        if ("auto".equals(sortType)) {
+            sort = new Sort(Sort.Direction.ASC, "sort");
+        } else if ("sort".equals(sortType)) {
+            sort = new Sort(Sort.Direction.ASC, "sort");
+        }
+        return new PageRequest(pageNumber - 1, pageSize, sort);
+    }
+
+
+    /**
+     * 创建动态查询条件组合
+     * @param filterParams
+     * @return
+     */
+    private Specification<Category> buildSpecification(Map<String, Object> filterParams) {
+        Map<String, cn.edu.nenu.config.orm.jpa.SearchFilter> filters = cn.edu.nenu.config.orm.jpa.SearchFilter.parse(filterParams);
+        Specification<Category> spec = DynamicSpecifications.bySearchFilter(filters.values(), Category.class);
+        return spec;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public float getMaxSort() {
+        Category category = CategoryRepository.findFirstByOrderBySortDesc();
+        if (category==null){
+            return 0;
+        }else {
+            return category.getSort();
+        }
+
+    }
 }
