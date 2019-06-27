@@ -31,10 +31,12 @@ public class Article extends IdEntity {
     @JoinColumn(name = "user_id",referencedColumnName = "id",nullable = false)
     private User user; //作者
 
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
+    @Column
     private Date createTime; //发布时间
 
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
+    @Column
     private Date lastEditTime; //最后更新时间
 
     @Column(nullable = true)
@@ -47,7 +49,7 @@ public class Article extends IdEntity {
     private int praise; //点赞量
 
     @Column(length = 11)
-    private int view; //浏览量
+    private int view=0; //浏览量
 
 
     public String getTitle() {

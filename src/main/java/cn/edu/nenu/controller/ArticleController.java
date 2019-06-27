@@ -4,17 +4,24 @@ import cn.edu.nenu.domain.Article;
 
 import cn.edu.nenu.domain.Category;
 import cn.edu.nenu.domain.Dict;
+import cn.edu.nenu.domain.User;
 import cn.edu.nenu.service.ArticleService;
+import cn.edu.nenu.util.HttpServlet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wangh on 2019/6/23.
@@ -28,16 +35,40 @@ public class ArticleController {
 
 
     /**
-     * 文章列表
+     * 我的文章列表
      * @param model
      * @return
      */
-    @RequestMapping(value = "list", method = RequestMethod.GET)
-    public String articleList(Model model){
-        List<Article> articleList = articleService.getAllArticle();
+    @RequestMapping(value = "mylist", method = RequestMethod.GET)
+    public String articleList(Model model, HttpSession session){
+        User user = (User)session.getAttribute("user");
+        List<Article> articleList = articleService.findArticleByUserId(user.getId());
+        System.out.println("哈哈哈哈哈"+articleList);
+
         model.addAttribute("articleList",articleList);
         return "article/myArticleList";
     }
+
+
+
+
+//    @RequestMapping(value = "/manage",method = RequestMethod.GET)
+//    public String list(@RequestParam(value = "sortType", defaultValue = "auto") String sortType,
+//                       @RequestParam(value = "page", defaultValue = "1") int pageNumber, Model model, HttpServletRequest request){
+//        Map<String, Object> searchParams = HttpServlet.getParametersStartingWith(request, "s_");
+//        Page<User> users = userService.getEntityPage(searchParams, pageNumber, PAGE_SIZE, sortType);
+//        User user = (User) request.getSession().getAttribute("user");
+//        model.addAttribute("user",user);
+//        model.addAttribute("users", users);
+//        model.addAttribute("sortType", sortType);
+//        model.addAttribute("PAGE_SIZE", PAGE_SIZE);
+//        model.addAttribute("searchParams", HttpServlet.encodeParameterStringWithPrefix(searchParams, "s_"));
+//        return "user/manage_user";
+//    }
+
+
+
+
 
     /**
      * 跳转到添加文章页面
