@@ -25,7 +25,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/Category")
 public class CategoryController {
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 100;
   @Autowired
     public CategoryService CategoryService;
 
@@ -118,7 +118,7 @@ public class CategoryController {
     public String toupdateSubCategory(@PathVariable("id") Long pkId, Model model){
         Category Category = CategoryService.findOne(pkId);
         model.addAttribute("Category", Category);
-        return "Category/editCategory";
+        return "Category/editSubCategory";
     }
 
     /**
@@ -133,9 +133,10 @@ public class CategoryController {
         Category Category1 = CategoryService.findOne(pkId);
         Category1.setTypename(Category.getTypename());
         Category1.setParents_id(Category.getParents_id());
+        Category1.setSort(Category.getSort());
         CategoryService.save(Category1);
         redirectAttributes.addAttribute("msg","修改成功！");
-        return "redirect:/Category/list";
+        return "redirect:/Category/todetail/"+Category.getParents_id();
     }
 
     /**

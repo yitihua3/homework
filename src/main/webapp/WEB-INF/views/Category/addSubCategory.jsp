@@ -49,7 +49,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"><i class="fa fa-comments"></i> <strong>News </strong></a>
+            <a class="navbar-brand" href="#"><i class="fa fa-comments"></i> <strong>Article </strong></a>
         </div>
 
         <ul class="nav navbar-top-links navbar-right">
@@ -109,7 +109,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="page-header">
-                        添加文章类别 <small>Add article category</small>
+                        添加文章子类别 <small>Add article subcategory</small>
                     </h1>
                 </div>
             </div>
@@ -128,12 +128,12 @@
                                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                         <tbody align="center">
                                         <tr>
-                                            <td>文章子类型</td>
-                                            <td><input type="test" name="typename" style="width: 100%; height: 45px;"  placeholder="输入类别名称" class="form-control"></td></tr>
+                                            <td  style="text-align: center">文章子类型</td>
+                                            <td  style="text-align: center"><input type="test" name="typename" style="width: 100%; height: 45px;"  placeholder="输入类别名称" class="form-control" required></td></tr>
                                         </tr>
                                         <tr><input type="test" name="parents_id" value="${id}" hidden></tr>
                                         <tr >
-                                            <td colspan="2">
+                                            <td colspan="2"  style="text-align: center;align-items: center">
                                                 <input type="submit" class="btn btn-info btn-sm" value="提交" >
                                             </td>
 

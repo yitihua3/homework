@@ -47,7 +47,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"><i class="fa fa-comments"></i> <strong>News </strong></a>
+            <a class="navbar-brand" href="#"><i class="fa fa-comments"></i> <strong>Article </strong></a>
         </div>
 
         <ul class="nav navbar-top-links navbar-right">
@@ -125,12 +125,12 @@
                                 <form action="${ctx}/Category/update" method="post">
                                     <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                         <tbody>
-                                        <td>文章类型</td>
-                                        <td><input type="test" name="typename" value="${Category.typename}"></td>
+                                        <td style="text-align: center;align-items: center">文章类型</td>
+                                        <td  style="text-align: center;align-items: center"><input type="test" name="typename" value="${Category.typename}" required></td>
                                         <tr><input type="test" name="id" value="${Category.id}" hidden></tr>
                                         <tr><input type="test" name="parents_id" value="${Category.parents_id}" hidden></tr>
                                         <tr>
-                                            <td colspan="2">
+                                            <td colspan="2"  style="text-align: center">
                                                 <input type="submit" class="btn btn-info btn-sm" value="确认修改" >
                                             </td>
                                         </tr>

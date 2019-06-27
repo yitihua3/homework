@@ -62,7 +62,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"><i class="fa fa-comments"></i> <strong>News </strong></a>
+            <a class="navbar-brand" href="#"><i class="fa fa-comments"></i> <strong>Article </strong></a>
         </div>
 
         <ul class="nav navbar-top-links navbar-right">
@@ -121,7 +121,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="page-header">
-                        类型列表 <small>查看所有新闻类别</small>
+                        类型列表 <small>查看所有文章类别</small>
                     </h1>
                 </div>
             </div>
@@ -137,33 +137,36 @@
 
                             <div class="table-responsive">
 
-                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example" style="text-align: center">
                                     <thead>
-                                    <tr align="center">
-                                    <th>序号</th>
-                                    <th>类型名称</th>
-                                    <th>查看子类</th>
-                                    <th>操作</th>
+                                    <tr>
+                                    <%--<th>序号</th>--%>
+                                    <th style="text-align: center">类型名称</th>
+                                    <th style="text-align: center">查看子类</th>
+                                    <th style="text-align: center">操作</th>
                                     </tr>
                                     </thead>
 
                                     <tbody>
 
                                     <c:forEach items="${CategoryList.content}"  var="Category" varStatus="status">
+
+                                        <c:if test="${Category.parents_id == 0}">
                                         <tr class="odd gradeX" id="par">
-
-                                            <td>${status.index+1}</td>
-                                            <td>  ${Category.typename} </td>
-                                            <td><a href="${ctx}/Category/todetail/${Category.id}" class="btn btn-info btn-sm">查看子类</a></td>
-                                            <td><a href="${ctx}/Category/toupdate/${Category.id}"  class="btn btn-info btn-sm">编辑</a>
+                                            <%--<td>${status.index+1}</td>--%>
+                                            <td style="text-align: center">${Category.typename} </td>
+                                            <td style="text-align: center"><a href="${ctx}/Category/todetail/${Category.id}" class="btn btn-info btn-sm">查看子类</a></td>
+                                            <td style="text-align: center"><a href="${ctx}/Category/toupdate/${Category.id}"  class="btn btn-info btn-sm">编辑</a>
                                                 |<a href="#"  dict="${Category.id}"  class="delete btn btn-info btn-sm  ">删除</a></td>
-
-
-
-
-
                                         </tr>
+                                        </c:if>
+
                                     </c:forEach>
+                                    <tr>
+                                        <td colspan="3">
+                                            <a href="${ctx}/Category/toadd">添加类别</a></li>
+                                        </td>
+                                    </tr>
 
                                     </tbody>
                                 </table>
@@ -171,9 +174,7 @@
                                 <br>
 
                                 ${msg}
-                                <ul>
-                                <li><a href="${ctx}/Category/toadd">添加</a></li>
-                                </ul>
+
                             </div>
 
                         </div>

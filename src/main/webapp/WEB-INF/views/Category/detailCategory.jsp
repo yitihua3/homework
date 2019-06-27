@@ -63,7 +63,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#"><i class="fa fa-comments"></i> <strong>News </strong></a>
+            <a class="navbar-brand" href="#"><i class="fa fa-comments"></i> <strong>Article </strong></a>
         </div>
 
         <ul class="nav navbar-top-links navbar-right">
@@ -140,26 +140,26 @@
 
                             <div class="table-responsive">
 
-                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example" style="text-align: center">
                                     <thead>
-                                    <tr align="center">
-                                        <th>序号</th>
-                                        <th>类型名称</th>
-                                        <th>操作</th>
+                                    <tr style="text-align: center">
+                                        <%--<th>序号</th>--%>
+                                        <th style="text-align: center">类型名称</th>
+                                        <th style="text-align: center">操作</th>
                                     </tr>
                                     </thead>
 
                                     <tbody>
 
                                     <c:forEach items="${CategoryList.content}"  var="Category" varStatus="status">
+                                        <c:if test="${Category.parents_id == id}">
                                         <tr class="odd gradeX" id="par">
-
-                                                <td>${status.index+1}</td>
-                                                <td>  ${Category.typename} </td>
-                                                <td><a href="${ctx}/Category/updateSubCategory/${Category.id}"  class="btn btn-info btn-sm">编辑</a>
+                                                <%--<td>${status.index+1}</td>--%>
+                                                <td style="text-align: center">  ${Category.typename} </td>
+                                                <td style="text-align: center"><a href="${ctx}/Category/updateSubCategory/${Category.id}"  class="btn btn-info btn-sm">编辑</a>
                                                     |<a href="#"  dict="${Category.id}"  class="delete btn btn-info btn-sm  ">删除</a></td>
-
                                         </tr>
+                                        </c:if>
                                     </c:forEach>
                                     <td colspan="3">
                                         <a href="${ctx}/Category/subCategoryAdd/${id}">添加子类</a></li>
