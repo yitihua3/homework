@@ -1,14 +1,13 @@
 package cn.edu.nenu.domain;
-
-/**
- * Created by wangh on 2019/3/29.
- */
-
 import cn.edu.nenu.config.orm.IdEntity;
 
 import javax.persistence.*;
-
-
+/**
+ * description:
+ * user:芋头
+ * date:2019/6/21
+ * time:13:23
+ */
 /**
  * 用户管理
  */

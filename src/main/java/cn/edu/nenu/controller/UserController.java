@@ -38,7 +38,7 @@ import java.util.UUID;
 @RequestMapping("/user")
 public class UserController {
 
-    private static final int PAGE_SIZE = 2;
+    private static final int PAGE_SIZE = 6;
 
     @Autowired
     public UserService userService;
