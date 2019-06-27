@@ -79,4 +79,15 @@ public class User extends IdEntity {
     public void setSort(float sort) {
         this.sort = sort;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", image='" + image + '\'' +
+                ", role=" + role +
+                ", sort=" + sort +
+                '}';
+    }
 }

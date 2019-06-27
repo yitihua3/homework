@@ -283,13 +283,20 @@ public class UserController {
      * @throws IOException
      */
     @RequestMapping(value = "/updateRole",method = RequestMethod.POST)
-    private void updateRole(@PathVariable("userId")Long id,HttpServletResponse response) throws IOException {
+    private void updateRole(@RequestParam("userId")Long id,HttpServletResponse response) throws IOException {
         User user = userService.findUser(id);
+        System.out.println(user);
         boolean flag = false;
         if (user.getRole()==0){
         user.setRole(1);
+        System.out.println(user);
         userService.save(user);
         flag = true;
+        }else{
+            user.setRole(0);
+            System.out.println(user);
+            userService.save(user);
+            flag = true;
         }
         String result="{\"res\":"+flag+"}";
         response.setContentType("application/json");

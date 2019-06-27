@@ -69,7 +69,7 @@
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 
-  <!--Shiro 配置-->
+  <!--&lt;!&ndash;Shiro 配置&ndash;&gt;-->
   <!--<filter>-->
     <!--<filter-name>shiroFilter</filter-name>-->
     <!--<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
