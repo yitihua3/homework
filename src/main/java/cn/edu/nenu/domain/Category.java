@@ -21,9 +21,9 @@ public class Category extends IdEntity {
     //所属大类对应的id，如果为0则为大类，不为0则所属大类的id
     @Column(nullable = false)
     private Long  parents_id;
-
+    //排序
     @Column()
-    private float sort; //排序
+    private float sort;
 
     public String getTypename() {
         return typename;

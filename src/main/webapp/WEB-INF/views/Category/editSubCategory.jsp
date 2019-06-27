@@ -129,6 +129,7 @@
                                         <td   style="text-align: center;align-items: center"><input type="test" name="typename" value="${Category.typename}" required></td>
                                         <tr><input type="test" name="id" value="${Category.id}" hidden></tr>
                                         <tr><input type="test" name="parents_id" value="${Category.parents_id}" hidden></tr>
+                                        <tr><input type="test" name="sort" value="${Category.sort}" hidden></tr>
                                         <tr>
                                             <td colspan="2"   style="text-align: center;align-items: center">
                                                 <input type="submit" class="btn btn-info btn-sm" value="确认修改" >
