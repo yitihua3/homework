@@ -75,10 +75,10 @@
             <ul class="nav" id="main-menu">
 
                 <li>
-                    <a href="${ctx}/section?state=listSection"><i class="fa fa-dashboard"></i> 新闻首页</a>
+                    <a href="${ctx}/section?state=listSection"><i class="fa fa-dashboard"></i> 文章首页</a>
                 </li>
                 <li>
-                    <a href="${ctx}/news?state=myNews&userId=${user.id}" ><i class="fa fa-desktop"></i> 我的新闻</a>
+                    <a href="${ctx}/news?state=myNews&userId=${user.id}" ><i class="fa fa-desktop"></i> 我的文章</a>
                 </li>
                 <li>
                     <a href="${ctx}/Category/list"><i class="fa fa-bar-chart-o"></i>类别管理</a>

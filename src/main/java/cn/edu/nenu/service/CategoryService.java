@@ -73,6 +73,10 @@ public class CategoryService {
         return (List<Category>) CategoryRepository.getAllSubCategory(pkId);
     }
 
+    public List<Category> getAllSubCategoryDirectly(){
+        return (List<Category>) CategoryRepository.getAllSubCategoryDirectly();
+    }
+
 
     public Page<Category> getEntityPage(Map<String, Object> filterParams, int pageNumber, int pageSize, String sortType){
         PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);

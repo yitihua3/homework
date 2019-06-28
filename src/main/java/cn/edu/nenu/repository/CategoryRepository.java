@@ -24,6 +24,10 @@ public interface CategoryRepository extends PlatformRepository<Category,Long> {
     @Query("select c From  Category c where c.parents_id = ?1")
     List<Category> getAllSubCategory(Long pkId);
 
+
+    @Query("select c From  Category c where c.parents_id <> 0")
+    List<Category> getAllSubCategoryDirectly();
+
     /**
      * 找出所有的大类
      * @return

@@ -121,7 +121,7 @@
             <ul class="nav" id="main-menu">
 
                 <li>
-                    <a href="${ctx}/section?state=listSection"><i class="fa fa-dashboard"></i> 新闻首页</a>
+                    <a href="${ctx}/section?state=listSection"><i class="fa fa-dashboard"></i> 文章首页</a>
                 </li>
                 <li>
                     <a href="${ctx}/article/mylist"><i class="fa fa-desktop"></i> 我的文章</a>

@@ -6,9 +6,11 @@ import cn.edu.nenu.domain.Category;
 import cn.edu.nenu.domain.Dict;
 import cn.edu.nenu.domain.User;
 import cn.edu.nenu.service.ArticleService;
+import cn.edu.nenu.service.CategoryService;
 import cn.edu.nenu.util.HttpServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +20,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +38,8 @@ public class ArticleController {
 
     @Autowired
     public ArticleService articleService;
+    @Autowired
+    public CategoryService categoryService;
 
 
     /**
@@ -43,8 +51,6 @@ public class ArticleController {
     public String articleList(Model model, HttpSession session){
         User user = (User)session.getAttribute("user");
         List<Article> articleList = articleService.findArticleByUserId(user.getId());
-        System.out.println("哈哈哈哈哈"+articleList);
-
         model.addAttribute("articleList",articleList);
         return "article/myArticleList";
     }
@@ -75,9 +81,12 @@ public class ArticleController {
      * @return
      */
     @RequestMapping(value = "add", method = RequestMethod.GET)
-    public String toAddArticle(){
+    public String toAddArticle(Model model){
+        List<Category> subCategoryList = categoryService.getAllSubCategoryDirectly();
+        model.addAttribute("SubCategoryList",subCategoryList);
         return "article/addArticle";
     }
+
 
     /**
      * 添加文章
@@ -86,10 +95,17 @@ public class ArticleController {
      * @return
      */
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    public String addArticle(Article entity, Model model){
-        entity.setCategory(new Category());
+    public String addArticle(Article entity,@RequestParam(value = "categoryId", defaultValue = "1") Long categoryId, Model model,HttpSession session,RedirectAttributes redirectAttributes){
+        Category category = categoryService.findOne(categoryId);
+        User user = (User)session.getAttribute("user");
+        entity.setCategory(category);
+        entity.setUser(user);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        entity.setCreateTime(dtf.format(LocalDateTime.now()));
+        entity.setLastEditTime(dtf.format(LocalDateTime.now()));
         Article article = articleService.save(entity);
-        return "redirect:/article/list";
+        redirectAttributes.addFlashAttribute("msg","发布成功！");
+        return "redirect:/article/mylist";
     }
 
 
@@ -102,23 +118,46 @@ public class ArticleController {
     @RequestMapping(value = "update/{id}", method = RequestMethod.GET)
     public String toUpdateArticle(@PathVariable("id") Long pkId, Model model){
         Article article = articleService.findOne(pkId);
+        List<Category> subCategoryList = categoryService.getAllSubCategoryDirectly();
+        model.addAttribute("subCategoryList",subCategoryList);
         model.addAttribute("article",article);
         return "article/editArticle";
     }
 
-
+    /**
+     * 修改文章
+     * @param article
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public String toUpdateArticle(Article article ,RedirectAttributes redirectAttributes){
+    public void toUpdateArticle(Article article ,@RequestParam(value = "categoryId", defaultValue = "1") Long categoryId,HttpServletResponse response){
         Long pkId = article.getId();
         Article article1 = articleService.findOne(pkId);
         article1.setTitle(article.getTitle());
         article1.setContent(article.getContent());
-        //article1.setLastEditTime(new Date().toString());
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        article1.setLastEditTime(dtf.format(LocalDateTime.now()));
+        article1.setCategory(categoryService.findOne(categoryId));
+        //附件有待修改
+        article1.setAttachment("");
         articleService.save(article1);
-        redirectAttributes.addAttribute("msg","修改成功！");
-        return "redirect:/article/list";
+        boolean flag = true;
+        String result="{\"res\":"+flag+"}";
+        response.setContentType("application/json");
+        try {
+            response.getWriter().write(String.valueOf(result));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * 删除文章
+     * @param pkId
+     * @param redirectAttributes
+     * @return
+     */
     @RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
     public String deleteArticle(@PathVariable("id") Long pkId,RedirectAttributes redirectAttributes){
         String msg = "删除成功";
@@ -127,7 +166,7 @@ public class ArticleController {
         }catch(Exception e){
             msg = "删除失败";
         }
-        redirectAttributes.addAttribute("msg",msg);
-        return "redirect:/article/list";
+        redirectAttributes.addFlashAttribute("msg",msg);
+        return "redirect:/article/mylist";
     }
 }

@@ -7,6 +7,7 @@ package cn.edu.nenu.domain;
 import cn.edu.nenu.config.orm.IdEntity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -33,11 +34,11 @@ public class Article extends IdEntity {
 
     //@Temporal(TemporalType.TIMESTAMP)
     @Column
-    private Date createTime; //发布时间
+    private String createTime; //发布时间
 
     //@Temporal(TemporalType.TIMESTAMP)
     @Column
-    private Date lastEditTime; //最后更新时间
+    private String lastEditTime; //最后更新时间
 
     @Column(nullable = true)
     private String attachment; //附件
@@ -84,19 +85,19 @@ public class Article extends IdEntity {
         this.user = user;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Date getLastEditTime() {
+    public String getLastEditTime() {
         return lastEditTime;
     }
 
-    public void setLastEditTime(Date lastEditTime) {
+    public void setLastEditTime(String lastEditTime) {
         this.lastEditTime = lastEditTime;
     }
 

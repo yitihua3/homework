@@ -14,7 +14,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title></title>
+    <title>我的文章</title>
     <!-- Bootstrap Styles-->
     <link href="../../../css/main/bootstrap.css" rel="stylesheet" />
     <!-- FontAwesome Styles-->
@@ -33,6 +33,10 @@
         .tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca; border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
         .tcdPageCode span.disabled{ display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px; color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
     </style>
+
+
+
+
 </head>
 <body>
 <div id="wrapper">
@@ -71,10 +75,10 @@
             <ul class="nav" id="main-menu">
 
                 <li>
-                    <a href="${ctx}/section?state=listSection"><i class="fa fa-dashboard"></i> 新闻首页</a>
+                    <a href="${ctx}/section?state=listSection"><i class="fa fa-dashboard"></i> 文章首页</a>
                 </li>
                 <li>
-                    <a href="${ctx}/article/mylist" class="active-menu"><i class="fa fa-desktop"></i> 我的新闻</a>
+                    <a href="${ctx}/article/mylist" class="active-menu"><i class="fa fa-desktop"></i> 我的文章</a>
                 </li>
                 <li>
                     <a href="${ctx}/login?state=single&userName=${user.userName}"><i class="fa fa-bar-chart-o"></i>个人中心</a>
@@ -103,9 +107,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="page-header">
-                        我的新闻 <small>My article</small>
+                        我的文章 <small>My article</small>
                     </h1>
-                    <a href="${ctx}/article?state=toAddarticle" class="btn btn-info btn-sm" style="display: inline-block;position: relative;bottom: 62px;margin-left: 280px;">写新闻</a>
+                    <a href="${ctx}/article/add" class="btn btn-info btn-sm" style="display: inline-block;position: relative;bottom: 62px;margin-left: 280px;">写文章</a>
                 </div>
             </div>
             <!-- /. ROW  -->
@@ -116,7 +120,7 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            我发布的新闻列表
+                            我发布的文章列表
                         </div>
 
 
@@ -129,7 +133,6 @@
 
 
                                     <span style="position: absolute;top:43px;left:55%;">
-
 
                                         <fmt:parseDate value="${article.createTime}" var="date" pattern="yyyy-MM-dd HH:mm:ss"/>
                                         <fmt:formatDate value="${date}" pattern="yyyy-MM-dd  HH:mm"/>
@@ -147,8 +150,9 @@
                                         赞：${article.praise} &nbsp;&nbsp; 浏览：${article.view}
                                     </span>
 
-                                    <a href="${ctx}/article?state=deletearticle3&id=${article.id}"><button type="button" class="btn btn-warning btn-circle" style="position: absolute;right:10%;opacity: 0.7"><span>删除</span></button></a>
-                                    <a href="${ctx}/article?state=toUpdatearticle&title=${article.title}&sectionId=${article.category.id}"><button type="button" class="btn btn-primary btn-circle" style="position: absolute;right: 5%;opacity: 0.7"><span>编辑</span></button></a>
+
+                                    <a href="#" class="delete" articleId="${article.id}"><button type="button" class="btn btn-warning btn-circle" style="position: absolute;right:10%;opacity: 0.7"><span>删除</span></button></a>
+                                    <a href="${ctx}/article/update/${article.id}"><button type="button" class="btn btn-primary btn-circle" style="position: absolute;right: 5%;opacity: 0.7"><span>编辑</span></button></a>
 
                                 </div>
 
@@ -199,6 +203,7 @@
 <script src="../../../js/main/jquery.metisMenu.js"></script>
 <!-- Custom Js -->
 <script src="../../../js/main/custom-scripts.js"></script>
+<script src="${ctx}/static/jquery-1.8.3.min.js"></script>
 
 </body>
 
@@ -208,4 +213,17 @@
         alert(msg);
     }
 </script>
+
+<script>
+    $(document).ready(function () {
+
+        $(".delete").bind("click",function () {
+            if(confirm("确定要删除吗？")){
+                var id = $(this).attr("articleId");
+                window.location.href = "${ctx}/article/delete/"+id;
+            }
+        });
+    });
+</script>
+
 </html>
