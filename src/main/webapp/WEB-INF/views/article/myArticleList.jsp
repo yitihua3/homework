@@ -128,7 +128,7 @@
                             <div class="panel-body" style="position: relative;">
 
                                 <div class="alert alert-info" style="padding-bottom: 37px;">
-                                    <a href="${ctx}/article?state=checkarticle&articleId=${article.id}" style="position: relative;top:10px;">${article.title}</a>
+                                    <a href="${ctx}/article/check/${article.id}" style="position: relative;top:10px;">${article.title}</a>
 
 
 

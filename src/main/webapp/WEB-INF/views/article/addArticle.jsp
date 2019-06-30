@@ -101,10 +101,15 @@
 
                     <div class="jumbotron" style="padding-top:0px;">
 
-                        <form action="${ctx}/article/add" method="post">
+                        <form action="${ctx}/article/add" method="post" enctype="multipart/form-data">
 
                             <input type="text" style="width: 100%; height: 45px;margin-bottom: 10px;" name="title" placeholder="输入文章标题" class="form-control">
                             <textarea id="ueditor" name="content" style="width:100%;height: 500px;overflow: auto"></textarea>
+
+                            <div class="file-box">
+                                上传附件
+                                <input  type="file" name="file" class="file-btn" id="doc" size="28"  />
+                            </div>
 
                             类别
                         <select id="first" name="categoryId" onchange="categorySelect()">

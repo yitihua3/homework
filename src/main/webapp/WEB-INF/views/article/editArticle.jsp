@@ -101,7 +101,7 @@
                     <div class="jumbotron">
 
                         <%--<form action="${ctx}/article?state=updatearticle" method="post">--%>
-                        <form id="form" >
+                        <form id="form" enctype="multipart/form-data">
                             <input id="id" type="hidden" value="${article.id}">
                             <input type="text" style="width: 100%; height: 45px;margin-bottom: 10px;" id="title" value="${article.title}" class="form-control">
                             <textarea id="ueditor"  style="width:100%;height: 500px;overflow: auto">${article.content}</textarea>
@@ -120,6 +120,11 @@
 
                                 </c:forEach>
                             </select>
+
+                            <div class="file-box">
+                                上传附件
+                                <input  type="file" id="file" name="file" class="file-btn"  size="28"  />
+                            </div>
 
 
                             <input type="button" class="btn btn-info btn-sm" id="save" value="保存修改">
@@ -161,10 +166,11 @@
 
         $("#save").click(
                 function () {
+                    var fileObj = document.getElementById("file").files[0]; //获取文件对象
                     $.ajax({
                         type:"POST",
                         url:"${ctx}/article/update",
-                        data:{id:$("#id").val(),categoryId:$("#categoryId").val(),title:$("#title").val(),content:UE.getEditor('ueditor').getContent()},
+                        data:{id:$("#id").val(),categoryId:$("#categoryId").val(),title:$("#title").val(),content:UE.getEditor('ueditor').getContent(),file:fileObj},
                         datatype:"json",
                         success:function (data) {
                             console.info(data);
