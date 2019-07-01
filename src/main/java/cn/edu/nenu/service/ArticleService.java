@@ -2,10 +2,7 @@ package cn.edu.nenu.service;
 
 import cn.edu.nenu.config.orm.jpa.DynamicSpecifications;
 import cn.edu.nenu.domain.Article;
-import cn.edu.nenu.domain.Dict;
-import cn.edu.nenu.domain.User;
 import cn.edu.nenu.repository.ArticleRepository;
-import cn.edu.nenu.repository.DictRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

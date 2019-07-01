@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
+import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -67,22 +68,6 @@ public class ArticleController {
         return "article/myArticleList";
     }
 
-
-
-
-//    @RequestMapping(value = "/manage",method = RequestMethod.GET)
-//    public String list(@RequestParam(value = "sortType", defaultValue = "auto") String sortType,
-//                       @RequestParam(value = "page", defaultValue = "1") int pageNumber, Model model, HttpServletRequest request){
-//        Map<String, Object> searchParams = HttpServlet.getParametersStartingWith(request, "s_");
-//        Page<User> users = userService.getEntityPage(searchParams, pageNumber, PAGE_SIZE, sortType);
-//        User user = (User) request.getSession().getAttribute("user");
-//        model.addAttribute("user",user);
-//        model.addAttribute("users", users);
-//        model.addAttribute("sortType", sortType);
-//        model.addAttribute("PAGE_SIZE", PAGE_SIZE);
-//        model.addAttribute("searchParams", HttpServlet.encodeParameterStringWithPrefix(searchParams, "s_"));
-//        return "user/manage_user";
-//    }
 
 
     /**
@@ -133,16 +118,18 @@ public class ArticleController {
 
         String name =file.getOriginalFilename();
         if(name!=""){
-            String postfix = name.substring(name.lastIndexOf("."), name.length()); //获取文件后缀
+            //String postfix = name.substring(name.lastIndexOf("."), name.length()); //获取文件后缀
             String root = request.getServletContext().getRealPath("/upload/attachment");//上传文件的路径
             File f = new File(root);
             if (!f.exists()) {
                 f.mkdirs();
             }
 
-            String x = UUID.randomUUID().toString() + postfix; //随机串防重名
-            String filename = root + "\\" + x;
+            //String x = UUID.randomUUID().toString() + postfix; //随机串防重名
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"); //加时间戳防文件重名
+            String x = dtf.format(LocalDateTime.now())+name;
 
+            String filename = root + "\\" + x;
 
             FileOutputStream fos = new FileOutputStream(filename);
             InputStream in = file.getInputStream();
@@ -196,14 +183,16 @@ public class ArticleController {
 
         String name =file.getOriginalFilename();
         if(name!=""){
-            String postfix = name.substring(name.lastIndexOf("."), name.length()); //获取文件后缀
+            //String postfix = name.substring(name.lastIndexOf("."), name.length()); //获取文件后缀
             String root = request.getServletContext().getRealPath("/upload/attachment");//上传文件的路径
             File f = new File(root);
             if (!f.exists()) {
                 f.mkdirs();
             }
 
-            String x = UUID.randomUUID().toString() + postfix; //随机串防重名
+            //String x = UUID.randomUUID().toString() + postfix; //随机串防重名
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
+            String x = dtf.format(LocalDateTime.now())+name;
             String filename = root + "\\" + x;
 
 
@@ -315,5 +304,27 @@ public class ArticleController {
         response.setContentType("application/json");
         response.getWriter().write(String.valueOf(result));
 
+    }
+
+
+    @RequestMapping(value="/download/{filename}",method=RequestMethod.GET)
+    public void download(@RequestParam(value="filename") String filename, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //模拟文件，myfile.txt为需要下载的文件
+        String path = request.getSession().getServletContext().getRealPath("upload\\attachment")+"\\"+filename;
+        //获取输入流
+        InputStream bis = new BufferedInputStream(new FileInputStream(new File(path)));
+        //转码，免得文件名中文乱码
+        filename = URLEncoder.encode(filename,"UTF-8");
+        //设置文件下载头
+        response.addHeader("Content-Disposition", "attachment;filename=" + filename);
+        //1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
+        response.setContentType("multipart/form-data");
+        BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
+        int len = 0;
+        while((len = bis.read()) != -1){
+            out.write(len);
+            out.flush();
+        }
+        out.close();
     }
 }

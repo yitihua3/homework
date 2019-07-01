@@ -32,11 +32,9 @@ public class Article extends IdEntity {
     @JoinColumn(name = "user_id",referencedColumnName = "id",nullable = false)
     private User user; //作者
 
-    //@Temporal(TemporalType.TIMESTAMP)
     @Column
     private String createTime; //发布时间
 
-    //@Temporal(TemporalType.TIMESTAMP)
     @Column
     private String lastEditTime; //最后更新时间
 

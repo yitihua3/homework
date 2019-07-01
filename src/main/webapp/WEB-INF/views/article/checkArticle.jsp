@@ -163,6 +163,9 @@
                         <h4 style="margin-left: 30px;">作者：${article.user.userName}</h4>
                         <p style="margin-left: 30px;">${article.content}</p>
 
+                        <h4 style="margin-left: 30px;">附件：<a href="${ctx}/article/download/${article.attachment}">${fn:substringAfter(article.attachment, "../../../upload/attachment/")}</a></h4>
+
+
                         <div style="position: relative;">
                             <a href="javascript:;" onclick="praise(this)">
                             <div class="stage">

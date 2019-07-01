@@ -1,11 +1,8 @@
 package cn.edu.nenu.service;
 
-import cn.edu.nenu.domain.Article;
 import cn.edu.nenu.domain.Comment;
 import cn.edu.nenu.repository.CommentRepository;
-import cn.edu.nenu.repository.DictRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.Lifecycle;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
