@@ -14,10 +14,10 @@ import java.util.List;
 public interface CommentRepository extends PlatformRepository<Comment,Long> {
 
     /**
-     * 根据NewsId获取评论列表，按时间降序
-     * @param newsId
+     * 根据articleId获取评论列表，按时间升序
+     * @param articleId
      * @return
      */
-    @Query("select c From Comment c where c.article.id = ?1 order by c.time DESC")
-    List<Comment> getCommentList(Long newsId);
+    @Query("select c From Comment c where c.article.id = ?1 order by c.time ASC")
+    List<Comment> getCommentList(Long articleId);
 }

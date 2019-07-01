@@ -15,7 +15,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>新闻详情</title>
+    <title>文章详情</title>
     <!-- Bootstrap Styles-->
     <link href="../../../css/main/bootstrap.css" rel="stylesheet" />
     <!-- FontAwesome Styles-->
@@ -118,13 +118,13 @@
             <ul class="nav" id="main-menu">
 
                 <li>
-                    <a href="${ctx}/section?state=listSection"><i class="fa fa-dashboard"></i> 新闻首页</a>
+                    <a href="${ctx}/section?state=listSection"><i class="fa fa-dashboard"></i> 文章首页</a>
                 </li>
                 <li>
-                    <a href="${ctx}/article?state=myarticle&userId=${user.id}" ><i class="fa fa-desktop"></i> 我的新闻</a>
+                    <a href="${ctx}/article/mylist" class="active-menu" ><i class="fa fa-desktop"></i> 我的文章</a>
                 </li>
                 <li>
-                    <a href="${ctx}/login?state=single&userName=${user.userName}"><i class="fa fa-bar-chart-o"></i>个人中心</a>
+                    <a href="${ctx}/user/main"><i class="fa fa-bar-chart-o"></i>个人中心</a>
                 </li>
 
                 <c:if test="${user.role == '1'}">
@@ -134,7 +134,7 @@
                 </c:if>
 
                 <li>
-                    <a href="${ctx}/login?state=exit"><i class="fa fa-table"></i>退出登录</a>
+                    <a href="${ctx}/user/exit"><i class="fa fa-table"></i>退出登录</a>
                 </li>
 
             </ul>
@@ -163,12 +163,14 @@
                         <h4 style="margin-left: 30px;">作者：${article.user.userName}</h4>
                         <p style="margin-left: 30px;">${article.content}</p>
 
-                        <div style="position: relative;"><a href="javascript:;" onclick="praise(this)">
+                        <div style="position: relative;">
+                            <a href="javascript:;" onclick="praise(this)">
                             <div class="stage">
                                 <div class="heart"></div>
                             </div>
-
-                        </a><label id="praise" style="position: absolute;left:83%;">${article.praise}</label> <span style="position: absolute;left: 85%;">浏览量：${article.view}</span></div>
+                            </a>
+                            <label id="praise" style="position: absolute;left:83%;">${article.praise}</label>
+                        </div>
 
 
 
@@ -208,7 +210,7 @@
 
                                                                 <input type="hidden" value="${commentList[listLength-status.count].id}" id="commentId">
                                                                 <c:if test="${user.id == article.user.id}">
-                                                                    <a title="删除" onClick="del(this)" href="javascript:;" style="margin-left: 700px;color: #31708f">删除</a>
+                                                                    <a title="删除" onClick="del(this)" href="javascript:;" style="margin-left: 650px;color: #31708f">删除</a>
                                                                 </c:if>
                                                             </h4>
 
@@ -305,7 +307,7 @@
                                     '</span>'+
 
                                     '<input type="hidden" value="'+commentId+'" id="commentId">'+
-                                    '<a title="删除" onClick="del(this)" href="javascript:;" style="margin-left: 712px;color: #31708f">删除</a>'+
+                                    '<a title="删除" onClick="del(this)" href="javascript:;" style="margin-left: 650px;color: #31708f">删除</a>'+
 
 
                                     '</h4>'+
@@ -336,7 +338,7 @@
     function praise(obj){
         $.ajax({
             type:"POST",
-            url:"${ctx}/article?state=praise",
+            url:"${ctx}/article/praise",
             data:{articleId:${article.id}},
             datatype:"json",
             success:function (data) {
@@ -361,15 +363,15 @@
 
 
 <script type="text/javascript">
-    //    删除回复
+    //    删除评论
     function del(obj){
-        var res = confirm('确认要删除此回复吗？');
+        var res = confirm('确认要删除此评论吗？');
 //        alert($(obj).parents(".panel-title").children("#commentId").val())
         if(res == true)
         {
             $.ajax({
                 type:"POST",
-                url:"${ctx}/article?state=deleteComment",
+                url:"${ctx}/article/deleteComment",
                 data:{commentId:$(obj).parents(".panel-title").children("#commentId").val()},
                 datatype:"json",
                 success:function (data) {

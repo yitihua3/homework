@@ -2,10 +2,7 @@ package cn.edu.nenu.controller;
 
 import cn.edu.nenu.domain.*;
 
-import cn.edu.nenu.service.ArticleService;
-import cn.edu.nenu.service.CategoryService;
-import cn.edu.nenu.service.CommentService;
-import cn.edu.nenu.service.UserService;
+import cn.edu.nenu.service.*;
 import cn.edu.nenu.util.HttpServlet;
 import cn.edu.nenu.util.Md5SaltTool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +48,9 @@ public class ArticleController {
     @Autowired
     public UserService userService;
 
+    @Autowired
+    public PraiseService praiseService;
+
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
@@ -85,7 +85,13 @@ public class ArticleController {
 //    }
 
 
-
+    /**
+     * 查看文章+评论
+     * @param id
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "check/{id}", method = RequestMethod.GET)
     public String checkArticle(@PathVariable("id") Long id,Model model, HttpSession session){
         Article article = articleService.findOne(id);
@@ -176,16 +182,15 @@ public class ArticleController {
     /**
      * 修改文章
      * @param article
-     * @param response
+     * @param redirectAttributes
      * @return
      */
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public void toUpdateArticle(Article article ,@RequestParam(value = "categoryId", defaultValue = "1") Long categoryId,@RequestParam(value = "file",defaultValue = "")CommonsMultipartFile file,HttpServletRequest request,HttpServletResponse response) throws IOException {
+    public String toUpdateArticle(Article article ,@RequestParam(value = "categoryId", defaultValue = "1") Long categoryId,@RequestParam(value = "file",defaultValue = "")CommonsMultipartFile file,HttpServletRequest request,RedirectAttributes redirectAttributes) throws IOException {
         Long pkId = article.getId();
         Article article1 = articleService.findOne(pkId);
         article1.setTitle(article.getTitle());
         article1.setContent(article.getContent());
-        //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         article1.setLastEditTime(dtf.format(LocalDateTime.now()));
         article1.setCategory(categoryService.findOne(categoryId));
 
@@ -216,14 +221,9 @@ public class ArticleController {
         }
 
         articleService.save(article1);
-        boolean flag = true;
-        String result="{\"res\":"+flag+"}";
-        response.setContentType("application/json");
-        try {
-            response.getWriter().write(String.valueOf(result));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        redirectAttributes.addFlashAttribute("msg","修改成功！");
+        return "redirect:/article/check/"+pkId;
+
     }
 
     /**
@@ -268,5 +268,52 @@ public class ArticleController {
 
         String json = JSONArray.fromObject(commentList).toString();
         response.getWriter().println(json);
+    }
+
+    /**
+     * 删除评论
+     * @param commentId
+     * @param response
+     * @throws IOException
+     */
+    @RequestMapping(value = "deleteComment",method = RequestMethod.POST)
+    public void deleteComment(@RequestParam(value = "commentId")Long commentId,HttpServletResponse response) throws IOException {
+        commentService.delete(commentId);
+        boolean res = true;
+        String result="{\"res\":\""+res+"\"}";
+        response.setContentType("application/json");
+        response.getWriter().write(String.valueOf(result));
+
+    }
+
+    /**
+     * 点赞与取消赞
+     * @param articleId
+     * @param response
+     * @param session
+     * @throws IOException
+     */
+    @RequestMapping(value = "praise",method = RequestMethod.POST)
+    public void praise(@RequestParam(value = "articleId")Long articleId,HttpServletResponse response,HttpSession session) throws IOException {
+        User user = (User)session.getAttribute("user");
+        Article article = articleService.findOne(articleId);
+        Praise praise = new Praise();
+        praise.setUser(user);
+        praise.setArticle(article);
+
+        int counts;
+        Praise praise1 = praiseService.findPraise(articleId,user.getId());
+        if(praise1==null){
+            praiseService.saveAndIncrease(praise); //增加点赞记录，并使相应文章点赞数+1
+            counts = article.getPraise()+1;
+        }else{
+            praiseService.deleteAndDecrease(praise1); //删除点赞记录，并使相应文章点赞数-1
+            counts = article.getPraise()-1;
+        }
+
+        String result="{\"counts\":\""+counts+"\"}";
+        response.setContentType("application/json");
+        response.getWriter().write(String.valueOf(result));
+
     }
 }

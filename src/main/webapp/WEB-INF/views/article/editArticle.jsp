@@ -68,7 +68,7 @@
                     <a href="${ctx}/article/mylist" ><i class="fa fa-desktop"></i> 我的文章</a>
                 </li>
                 <li>
-                    <a href="${ctx}/login?state=single&userName=${user.userName}"><i class="fa fa-bar-chart-o"></i>个人中心</a>
+                    <a href="${ctx}/user/main"><i class="fa fa-bar-chart-o"></i>个人中心</a>
                 </li>
 
                 <c:if test="${user.role == '1'}">
@@ -78,7 +78,7 @@
                 </c:if>
 
                 <li>
-                    <a href="${ctx}/login?state=exit"><i class="fa fa-table"></i>退出登录</a>
+                    <a href="${ctx}/user/exit"><i class="fa fa-table"></i>退出登录</a>
                 </li>
 
             </ul>
@@ -101,13 +101,13 @@
                     <div class="jumbotron">
 
                         <%--<form action="${ctx}/article?state=updatearticle" method="post">--%>
-                        <form id="form" enctype="multipart/form-data">
-                            <input id="id" type="hidden" value="${article.id}">
-                            <input type="text" style="width: 100%; height: 45px;margin-bottom: 10px;" id="title" value="${article.title}" class="form-control">
-                            <textarea id="ueditor"  style="width:100%;height: 500px;overflow: auto">${article.content}</textarea>
+                        <form id="form" action="${ctx}/article/update" method="post" enctype="multipart/form-data">
+                            <input id="id" name="id" type="hidden" value="${article.id}">
+                            <input type="text" name="title" style="width: 100%; height: 45px;margin-bottom: 10px;" id="title" value="${article.title}" class="form-control">
+                            <textarea id="ueditor" name="content" style="width:100%;height: 500px;overflow: auto">${article.content}</textarea>
 
                             类别
-                            <select id="categoryId">
+                            <select id="categoryId" name="categoryId">
                                 <c:forEach items="${subCategoryList}" var="category">
                                     <c:choose>
                                         <c:when test="${article.category.id eq category.id}">
@@ -127,7 +127,8 @@
                             </div>
 
 
-                            <input type="button" class="btn btn-info btn-sm" id="save" value="保存修改">
+                            <%--<input type="button" class="btn btn-info btn-sm" id="save" value="保存修改">--%>
+                            <input type="submit" name="submit"  class="btn btn-info btn-sm" value="保存修改">
 
                             <a href="${ctx}/article?state=checkarticle&articleId=${id}"  class="btn btn-info btn-sm" id="check" style="display: none">查看文章</a>
                         </form>

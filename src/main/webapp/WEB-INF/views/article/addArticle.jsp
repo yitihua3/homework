@@ -69,7 +69,7 @@
                     <a href="${ctx}/article/mylist" class="active-menu"><i class="fa fa-desktop"></i> 我的文章</a>
                 </li>
                 <li>
-                    <a href="${ctx}/login?state=single&userName=${user.userName}"><i class="fa fa-bar-chart-o"></i>个人中心</a>
+                    <a href="${ctx}/user/main"><i class="fa fa-bar-chart-o"></i>个人中心</a>
                 </li>
 
                 <c:if test="${user.role == '1'}">
@@ -79,7 +79,7 @@
                 </c:if>
 
                 <li>
-                    <a href="${ctx}/login?state=exit"><i class="fa fa-table"></i>退出登录</a>
+                    <a href="${ctx}/user/exit"><i class="fa fa-table"></i>退出登录</a>
                 </li>
 
             </ul>

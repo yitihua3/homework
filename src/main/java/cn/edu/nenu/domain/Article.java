@@ -49,9 +49,6 @@ public class Article extends IdEntity {
     @Column(length = 11)
     private int praise; //点赞量
 
-    @Column(length = 11)
-    private int view=0; //浏览量
-
 
     public String getTitle() {
         return title;
@@ -125,11 +122,4 @@ public class Article extends IdEntity {
         this.praise = praise;
     }
 
-    public int getView() {
-        return view;
-    }
-
-    public void setView(int view) {
-        this.view = view;
-    }
 }
